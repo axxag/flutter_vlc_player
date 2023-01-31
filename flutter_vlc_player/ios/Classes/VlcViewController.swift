@@ -118,7 +118,7 @@ public class VLCViewController: NSObject, FlutterPlatformView {
     }
     
     public func getSpuTracksCount() -> NSNumber? {
-        return NSNumber(value: self.vlcMediaPlayer?.textTracks.count ?? 0)
+        return NSNumber(value: self.vlcMediaPlayer?.numberOfSubtitlesTracks ?? 0)
     }
     
     public func getSpuTracks() -> [Int: String]? {
@@ -156,7 +156,7 @@ public class VLCViewController: NSObject, FlutterPlatformView {
     }
     
     public func getAudioTracksCount() -> NSNumber? {
-        return NSNumber(value: self.vlcMediaPlayer?.audioTracks.count ?? 0)
+        return NSNumber(value: self.vlcMediaPlayer?.numberOfAudioTracks ?? 0)
     }
     
     public func getAudioTracks() -> [Int: String]? {
