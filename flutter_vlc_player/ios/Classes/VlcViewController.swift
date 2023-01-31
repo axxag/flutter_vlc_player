@@ -40,8 +40,8 @@ public class VLCViewController: NSObject, FlutterPlatformView {
     public func initialize(options: [String]) {
         let vlcMediaPlayer = VLCMediaPlayer(options: options)
         let vlcLogger = VLCConsoleLogger()
-        vlcLogger.level = VLCLogLevel.debug
-        vlcMediaPlayer.libraryInstance.loggers = [vlcLogger]
+        // vlcLogger.level = VLCLogLevel.debug
+        // vlcMediaPlayer.libraryInstance.loggers = [vlcLogger]
         vlcMediaPlayer.drawable = self.hostedView
         vlcMediaPlayer.delegate = self.mediaEventChannelHandler
         
