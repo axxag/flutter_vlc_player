@@ -309,8 +309,7 @@ public class VLCViewController: NSObject, FlutterPlatformView {
         self.mediaEventChannel.setStreamHandler(nil)
         self.rendererEventChannel.setStreamHandler(nil)
         self.vlcMediaPlayer?.stop()
-        self.vlcMediaPlayer?.drawable = nil
-        self.vlcMediaPlayer?.delegate = nil
+        self.vlcMediaPlayer = nil
         self.isDisposed = true
     }
     
