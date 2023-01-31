@@ -28,9 +28,13 @@ public class VLCViewController: NSObject, FlutterPlatformView {
         )
         
         self.hostedView = UIView(frame: frame)
-        self.vlcMediaPlayer = VLCMediaPlayer()
-        self.vlcMediaPlayer.libraryInstance.debugLogging = true
-        self.vlcMediaPlayer.libraryInstance.debugLoggingLevel = 3
+        
+        self.vlcMediaPlayer = VLCMediaPlayer(options: <#T##[Any]#>)
+        
+        let vlcLogger = VLCConsoleLogger()
+        vlcLogger.level = VLCLogLevel.debug
+        self.vlcMediaPlayer.libraryInstance.loggers = [vlcLogger]
+        
         self.mediaEventChannel = mediaEventChannel
         self.mediaEventChannelHandler = VLCPlayerEventStreamHandler()
         self.rendererEventChannel = rendererEventChannel
@@ -109,7 +113,7 @@ public class VLCViewController: NSObject, FlutterPlatformView {
     }
     
     public func getSpuTracksCount() -> NSNumber? {
-        return NSNumber(value: self.vlcMediaPlayer.numberOfSubtitlesTracks)
+        return NSNumber(value: self.vlcMediaPlayer.textTracks.count)
     }
     
     public func getSpuTracks() -> [Int: String]? {
@@ -147,7 +151,7 @@ public class VLCViewController: NSObject, FlutterPlatformView {
     }
     
     public func getAudioTracksCount() -> NSNumber? {
-        return NSNumber(value: self.vlcMediaPlayer.numberOfAudioTracks)
+        return NSNumber(value: self.vlcMediaPlayer.audioTracks.count)
     }
     
     public func getAudioTracks() -> [Int: String]? {
@@ -283,11 +287,13 @@ public class VLCViewController: NSObject, FlutterPlatformView {
     }
     
     public func startRecording(saveDirectory: String) -> NSNumber {
-        return (!self.vlcMediaPlayer.startRecording(atPath: saveDirectory)) as NSNumber
+        self.vlcMediaPlayer.startRecording(atPath: saveDirectory)
+        return 0
     }
     
     public func stopRecording() -> NSNumber {
-        return (!self.vlcMediaPlayer.stopRecording()) as NSNumber
+        self.vlcMediaPlayer.stopRecording()
+        return 0
     }
     
     public func dispose() {
@@ -323,6 +329,7 @@ public class VLCViewController: NSObject, FlutterPlatformView {
         
         if !options.isEmpty {
             for option in options {
+                print("Parsing option: \(option)")
                 media.addOption(option)
             }
         }
@@ -451,12 +458,6 @@ class VLCPlayerEventStreamHandler: NSObject, FlutterStreamHandler, VLCMediaPlaye
                 "activeAudioTrack": activeAudioTrack,
                 "spuTracksCount": spuTracksCount,
                 "activeSpuTrack": activeSpuTrack,
-            ])
-            
-        case .ended:
-            mediaEventSink([
-                "event": "ended",
-                "position": position,
             ])
             
         case .buffering:
