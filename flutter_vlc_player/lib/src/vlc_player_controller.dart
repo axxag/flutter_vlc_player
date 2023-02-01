@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -169,11 +168,12 @@ class VlcPlayerController extends ValueNotifier<VlcPlayerValue> {
   /// Attempts to open the given [url] and load metadata about the video.
   Future<void> initialize() async {
     if (_isDisposed) {
-      throw Exception(
-          'initialize was called on a disposed VlcPlayerController');
+      print('initialize was called on a disposed VlcPlayerController');
+      return;
     }
     if (value.isInitialized) {
-      throw Exception('Already Initialized');
+      print('Already Initialized');
+      return;
     }
 
     _lifeCycleObserver = VlcAppLifeCycleObserver(this);
